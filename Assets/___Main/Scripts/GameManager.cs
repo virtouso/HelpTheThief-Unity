@@ -8,6 +8,24 @@ public class GameManager : MonoBehaviour
 
 
     #endregion
+    public static GameManager Instance;
+
+    private bool alerted;
+
+    public bool Alerted
+    {
+        get { return alerted; }
+        set
+        {
+
+
+            alerted = value;
+            OnAllert();
+        }
+    }
+
+
+
 
     #region Unity References
     [SerializeField] private GameObject _thiefPrefab;
@@ -21,6 +39,12 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region unity callbacks
+
+
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
         initThief();
@@ -64,8 +88,7 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("You selected the " + hit.transform.name); // ensure you picked right object
         goalPosition = hit.point;
-        GameObject g = new GameObject("goal");
-        g.transform.position = goalPosition;
+
 
 
         NavMeshAgent agent = _thief.GetComponent<NavMeshAgent>();
@@ -83,6 +106,13 @@ public class GameManager : MonoBehaviour
 
     }
 
+
+
+    private void OnAllert()
+    {
+        print("you lost buddy");
+
+    }
 
     #endregion
 
