@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 262073819371079902}
   - component: {fileID: 5267567028053021688}
   - component: {fileID: 4181346098408723065}
+  - component: {fileID: 142677406822086299}
   m_Layer: 0
   m_Name: Thief
   m_TagString: Thief
@@ -133,6 +134,22 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!54 &142677406822086299
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 796705339208685482}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &7514419116991285738
 GameObject:
   m_ObjectHideFlags: 0

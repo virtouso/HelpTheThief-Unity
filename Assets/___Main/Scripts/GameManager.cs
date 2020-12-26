@@ -53,6 +53,12 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (alerted)
+        {
+
+            _thief.GetComponent<NavMeshAgent>().isStopped = true;
+            return;
+        }
         sendThiefToPosition();
     }
 

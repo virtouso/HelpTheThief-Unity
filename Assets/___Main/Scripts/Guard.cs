@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+
 
 public class Guard : MonoBehaviour
 {
@@ -12,10 +14,32 @@ public class Guard : MonoBehaviour
     [SerializeField] private int _sightResolution;
     [SerializeField] private MeshFilter _sight;
     [SerializeField] private LayerMask _detectionMask;
+
+
+
+    [SerializeField] private bool movable;
+    [SerializeField] private Transform[] _destinations;
+    [SerializeField] private float _speed;
+
+    private NavMeshAgent _agent;
+
+
+    private void Awake()
+    {
+        _agent = GetComponent<NavMeshAgent>();
+    }
+
+
+    private void Start()
+    {
+        if (!movable) return;
+        _agent.SetDestination(_destinations[destinationCounter].position);
+    }
+
     private void Update()
     {
         CalculateEyeSight();
-
+        MoveGuard();
     }
 
     private void CalculateEyeSight()
@@ -47,7 +71,6 @@ public class Guard : MonoBehaviour
         mesh.Clear();
 
         var vertices = new Vector3[_sightResolution + 1];
-
         var triangles = new int[(_sightResolution + 1) * 3];
         var uv = new Vector2[_sightResolution + 1];
         var normals = new Vector3[_sightResolution + 1];
@@ -75,10 +98,12 @@ public class Guard : MonoBehaviour
             Vector3 rayCheck = (vertexPositione - transform.position);
             bool hitWall = Physics.Raycast(transform.position, rayCheck.normalized, out hit, _viewRadius, _detectionMask.value);
 
+
+            Vector3 V = transform.TransformPoint(vertices[i]);
             if (hitWall)
             {
                 vertexPositione = hit.point;
-                vertices[i] = vertexPositione - _sight.transform.position;
+                vertices[i] = transform.InverseTransformPoint ( vertexPositione); //+ _sight.transform.localPosition;//    _sight.transform.position;
                 // check player detection
                 if (hit.collider.tag == "Thief") { GameManager.Instance.Alerted = true; }
 
@@ -99,12 +124,29 @@ public class Guard : MonoBehaviour
 
 
         mesh.vertices = vertices;
+        // mesh.uv = uv;
         mesh.triangles = triangles;
-        mesh.RecalculateBounds();
+        //  mesh.normals = normals;
+        //   mesh.RecalculateBounds();
+        // mesh.RecalculateNormals();
+        //  mesh.RecalculateTangents();
     }
 
 
 
+    private int destinationCounter;
+    private void MoveGuard()
+    {
+
+        if (Vector3.Distance(transform.position, _destinations[destinationCounter].position) < _speed)
+        {
+
+            if (destinationCounter < _destinations.Length - 1) destinationCounter++;
+            else destinationCounter = 0;
+
+            _agent.SetDestination(_destinations[destinationCounter].position);
+        }
+    }
 
 
 
